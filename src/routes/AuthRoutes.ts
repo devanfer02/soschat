@@ -13,14 +13,14 @@ router.post(
     '/api/register', 
     userValidator.checkUserRegisterForm(), 
     validatorHandler,
-    registerUser
+    registerUser,
 );
 
-router.use(authValidation).post(
+router.post(
     '/api/login',
     userValidator.checkUserLoginForm(),
     validatorHandler,
-    loginUser
+    loginUser,
 );
 
 export default router;

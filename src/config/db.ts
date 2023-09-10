@@ -1,9 +1,9 @@
 import { Sequelize } from 'sequelize'
 
-import { dbName, dbUsername, dbPassword, dbHost } from './env.variables';
+import env from './env.variables';
 
-const db = new Sequelize(dbName, dbUsername, dbPassword, {
-    host: dbHost,
+const db = new Sequelize(env.dbName, env.dbUsername, env.dbPassword, {
+    host: env.dbHost,
     dialect: "mysql"
 })
 

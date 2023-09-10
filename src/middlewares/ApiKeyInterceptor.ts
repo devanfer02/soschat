@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction} from 'express';
-import { apiKey, apiKeyName } from '../config/env.variables';
+import env from '../config/env.variables';
 
 class ApiKeyInterceptor {
     constructor(private apiKey: string, private apiKeyName: string) {}
@@ -24,6 +24,6 @@ class ApiKeyInterceptor {
     }
 };
 
-const apiKeyInterceptor = new ApiKeyInterceptor(apiKey, apiKeyName);
+const apiKeyInterceptor = new ApiKeyInterceptor(env.apiKey, env.apiKeyName);
 
 export default apiKeyInterceptor;

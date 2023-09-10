@@ -4,7 +4,7 @@ import helmet from 'helmet';
 import session from 'express-session';
 import SequelizeStore from 'connect-session-sequelize';
 
-import { serverPort, sessionKey } from './config/env.variables';
+import env from './config/env.variables';
 import db from './config/db';
 import apiKeyInterceptor from './middlewares/ApiKeyInterceptor';
 
@@ -23,7 +23,7 @@ const sessionStorage = new SessionStore({
 const app = express();
 
 app.use(session({
-    secret: sessionKey,
+    secret: env.sessionKey,
     resave: false,
     saveUninitialized: true,
     store: sessionStorage,
@@ -39,6 +39,6 @@ app.use(PostRoutes);
 app.use(UserRoutes);
 app.use(AuthRoutes);
 
-app.listen( serverPort, () => {
-    console.log(`server is running at http://localhost:${serverPort}`);
+app.listen( env.serverPort, () => {
+    console.log(`server is running at http://localhost:${env.serverPort}`);
 })

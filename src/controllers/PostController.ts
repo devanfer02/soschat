@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { v4 as uuidv4 } from 'uuid';
 
 import Post from "../db/models/Post";
-import { createResponse } from "../config/utils"
+import { createResponse } from "../helpers/response"
 
 export const getAllPosts = async (req: Request, res: Response): Promise<Response> => {    
     try {

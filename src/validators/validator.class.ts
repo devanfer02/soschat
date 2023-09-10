@@ -4,17 +4,23 @@ class UserValidator {
     checkUserRegisterForm() {
         return [
             body("fullname").
+            trim().
             notEmpty().
             withMessage("fullname value shouldn't be empty"),
             body("username").
+            trim().
             notEmpty().
             withMessage("username value shouldn't be empty"),
             body("password").
+            trim().
             notEmpty().
             withMessage("password value shouldn't be empty"),
             body("email").
+            trim().
             notEmpty().
-            withMessage("email value shouldn't be empty"),
+            withMessage("email value shouldn't be empty").
+            isEmail().
+            withMessage("not a valid email"),
         ];
     }
 
@@ -34,9 +40,11 @@ class PostValidator {
     checkPostForm() {
         return [
             body("title"). 
+            trim().
             notEmpty(). 
             withMessage("title value shouldn't be empty"),
             body("desc").
+            trim().
             notEmpty().
             withMessage("desc value shouldn't be empty")
         ]
@@ -45,6 +53,7 @@ class PostValidator {
     checkPostId() {
         return [
             param("id"). 
+            trim().
             notEmpty().
             withMessage("param id shouldn't be empty")
         ]

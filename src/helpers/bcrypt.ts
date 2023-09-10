@@ -1,24 +1,6 @@
-import { Response } from "express"
 import bcrypt from 'bcrypt';
 
-import { saltRounds } from "./env.variables";
-
-interface ApiResponse<T> {
-    status: number,
-    message: string,
-    data? : T,
-}
-
-export const createResponse = <T>(res: Response, status: number, message: string, data?: T): Response => {
-    const response: ApiResponse<T> = {
-        status,
-        message,
-    };
-
-    if (data !== undefined) response.data = data;
-
-    return res.status(status).json(response);
-};
+import { saltRounds } from "../config/env.variables";
 
 export const hashPassword = async (password: string): Promise<string> => {
     try {

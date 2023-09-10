@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { createResponse } from '../config/utils';
-import { jwtKey } from '../config/env.variables';
+import { createResponse } from '../helpers/response';
+import env from '../config/env.variables';
 import jwt from 'jsonwebtoken';
 
 export const authValidation = async (req: Request, res: Response, next: NextFunction) => {
@@ -15,7 +15,7 @@ export const authValidation = async (req: Request, res: Response, next: NextFunc
     }
 
     try {
-        const decodedToken = jwt.verify(token, jwtKey) as {userId?: string};
+        const decodedToken = jwt.verify(token, env.jwtKey) as {userId?: string};
         
         if (decodedToken.userId === undefined) {
             return createResponse(res, 401, 'unauthorized');
