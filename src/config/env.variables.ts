@@ -4,7 +4,7 @@ config();
 
 const throwUndefinedEnv = (message: string) => {
     throw new Error('env: ' + message);
-}
+};
 
 const env = {
     apiKey      : process.env.API_KEY ? process.env.API_KEY : throwUndefinedEnv('api_key is undefined'),

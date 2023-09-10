@@ -17,8 +17,8 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
         const user = await User.findOne({
             where: {
                 [Op.or]: [
-                    {email: req.body.email},
-                    {username: req.body.username},
+                    {email},
+                    {username},
                 ]
             }
         });
@@ -43,10 +43,12 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
 };
 
 export const loginUser = async (req: Request, res: Response): Promise<Response> => {
+    const { username, password } = req.body;
+
     try {
         const user = await User.findOne({
             where: {
-                username: req.body.username
+                username: username
             }
         });
 
@@ -54,7 +56,7 @@ export const loginUser = async (req: Request, res: Response): Promise<Response> 
             return createResponse(res, status.Unauthorized, 'user or password doesnt match');
         }
 
-        const passwordMatch = await comparePassword(req.body.password, user.password);
+        const passwordMatch = await comparePassword(password, user.password);
 
         if (!passwordMatch) {
             return createResponse(res, status.Unauthorized, 'user or password doesnt match');
