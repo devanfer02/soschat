@@ -7,7 +7,8 @@ import User from "../db/models/User";
 import status from "../helpers/status";
 import { createResponse, createResponseErr } from "../helpers/response";
 import { hashPassword, comparePassword } from "../helpers/bcrypt";
-import env from "../config/env.variables";
+import env from "../config/env";
+import { generateToken, verifyToken } from "../helpers/jwt";
 
 export const registerUser = async (req: Request, res: Response): Promise<Response> => {
     const id = uuidv4();
@@ -17,17 +18,18 @@ export const registerUser = async (req: Request, res: Response): Promise<Respons
         const user = await User.findOne({
             where: {
                 [Op.or]: [
-                    {email},
-                    {username},
+                    {email}, {username}
                 ]
             }
         });
+        
 
         if (user !== null) {
             return createResponse(res, status.Conflict, 'email or username already exist');
         }
 
         const hashedPassword = await hashPassword(password);
+        
         await User.create({
             id,
             fullname,
@@ -47,32 +49,39 @@ export const loginUser = async (req: Request, res: Response): Promise<Response> 
 
     try {
         const user = await User.findOne({
-            where: {
-                username: username
-            }
+            where: { username }
         });
 
         if (user === null) {
-            return createResponse(res, status.Unauthorized, 'user or password doesnt match');
+            return createResponse(res, status.Unauthorized, 'invalid user or password');
         }
 
         const passwordMatch = await comparePassword(password, user.password);
 
         if (!passwordMatch) {
-            return createResponse(res, status.Unauthorized, 'user or password doesnt match');
+            return createResponse(res, status.Unauthorized, 'invalid user or password');
         }
 
-        const token = jwt.sign({ userId: user.id }, env.jwtKey, {
-            expiresIn: '6h'
-        });
-
-        if (req.session === undefined) {
-            throw new Error('req.session is undefined');
-        }
-
-        req.session.token! = token;
+        const token = generateToken({id: user.id, fullname: user.fullname, email: user.email});
+        res.cookie("accessToken", token, {
+            maxAge: 30000,
+            httpOnly: true 
+        })
 
         return createResponse(res, status.Ok, 'user successfully login');
+    } catch (error) {
+        return createResponseErr(res, status.ServerError, 'internal server error', error as Error);
+    }
+}
+
+export const logoutUser = async (req: Request, res: Response): Promise<Response> => {
+    try {
+        res.cookie("accessToken", undefined, {
+            maxAge: 0,
+            httpOnly: true
+        })
+
+        return createResponse(res, status.Ok, 'user successfully logout');
     } catch (error) {
         return createResponseErr(res, status.ServerError, 'internal server error', error as Error);
     }

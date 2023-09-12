@@ -18,11 +18,10 @@ export const getAllPosts = async (req: Request, res: Response): Promise<Response
 export const createPost = async (req: Request, res: Response): Promise<Response> => {
     const id = uuidv4();
     try {
-        const userId = req.session!.userId
+        const userId = req.session!.user.id;
         
         const record = await Post.create({...req.body, id, userId});
 
-        req.session!.userId = undefined;
         return createResponse(res, 201, "successfully create new post", record);
     } catch (error) {
         console.log(error);

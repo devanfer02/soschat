@@ -14,7 +14,9 @@ class UserValidator {
             body("password").
             trim().
             notEmpty().
-            withMessage("password value shouldn't be empty"),
+            withMessage("password value shouldn't be empty").
+            isLength({min:8,max:250}).
+            withMessage("password minimal length is 8, maximal length is 250"),
             body("email").
             trim().
             notEmpty().

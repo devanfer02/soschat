@@ -1,10 +1,11 @@
 import bcrypt from 'bcrypt';
 
-import env from "../config/env.variables";
+import env from "../config/env";
 
 export const hashPassword = async (password: string): Promise<string> => {
     try {
-        const hash = await bcrypt.hash(password, env.saltRounds);
+        const salt = await bcrypt.genSalt(env.saltRounds);
+        const hash = await bcrypt.hash(password, salt);
 
         return hash;
     } catch (error) {

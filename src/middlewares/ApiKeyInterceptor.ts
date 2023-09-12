@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction} from 'express';
-import env from '../config/env.variables';
+import env from '../config/env';
 
 class ApiKeyInterceptor {
     constructor(private apiKey: string, private apiKeyName: string) {}

@@ -3,24 +3,29 @@ import { userValidator } from '../validators/validator.class';
 import { validatorHandler } from '../validators/validator.handler';
 import {
     registerUser,
-    loginUser
+    loginUser,
+    logoutUser
 } from '../controllers/AuthController';
-import { authValidation } from '../middlewares/Auth';
 
 const router = express.Router();
 
 router.post(
-    '/api/register', 
+    '/api/auth/register', 
     userValidator.checkUserRegisterForm(), 
     validatorHandler,
     registerUser,
 );
 
 router.post(
-    '/api/login',
+    '/api/auth/login',
     userValidator.checkUserLoginForm(),
     validatorHandler,
     loginUser,
 );
+
+router.post(
+    '/api/auth/logout',
+    logoutUser
+)
 
 export default router;

@@ -1,30 +1,20 @@
 import { Request, Response, NextFunction } from 'express';
-import { createResponse } from '../helpers/response';
-import env from '../config/env.variables';
-import jwt from 'jsonwebtoken';
+import status from '../helpers/status';
+import { verifyToken } from '../helpers/jwt';
 
 export const authValidation = async (req: Request, res: Response, next: NextFunction) => {
-    if (req.session === undefined) {
-        return createResponse(res, 401, 'unauthorized');
+    const accessToken = req.cookies.accessToken;
+    
+    if (!accessToken) {
+        return res.sendStatus(status.Unauthorized);
     }
 
-    const token = req.session.token;
+    const { payload } = verifyToken(accessToken);
 
-    if (token === undefined) {
-        return createResponse(res, 401, 'unauthorized');
+    if (!payload) {
+        return res.sendStatus(status.Unauthorized);
     }
 
-    try {
-        const decodedToken = jwt.verify(token, env.jwtKey) as {userId?: string};
-        
-        if (decodedToken.userId === undefined) {
-            return createResponse(res, 401, 'unauthorized');
-        }
-        
-        
-        req.session.userId = decodedToken.userId;
-        next();
-    } catch (error) {
-        return createResponse(res, 500, 'internal server error');
-    }
+    req.session!.user = payload;
+    next();
 }
