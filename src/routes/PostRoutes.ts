@@ -7,7 +7,7 @@ import {
     deletePost,
     updatePost
 } from '../controllers/PostController'
-import { authValidation } from '../middlewares/Auth';
+import { requireUser } from '../middlewares/Auth';
 
 const router = express.Router();
 
@@ -18,7 +18,7 @@ router.get(
 
 router.post(
     '/api/posts',
-    authValidation,
+    requireUser,
     postValidator.checkPostForm(), 
     validatorHandler,
     createPost
@@ -26,7 +26,7 @@ router.post(
 
 router.patch(
     '/api/posts/:id',
-    authValidation,
+    requireUser,
     postValidator.checkPostId(),
     validatorHandler,
     updatePost
@@ -34,7 +34,7 @@ router.patch(
 
 router.delete(
     '/api/posts/:id',
-    authValidation,
+    requireUser,
     postValidator.checkPostId(),
     validatorHandler,
     deletePost

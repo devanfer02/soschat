@@ -1,5 +1,8 @@
-import { Model, DataTypes } from 'sequelize';
+import { Model, DataTypes, Optional } from 'sequelize';
 import db from '../../config/db';
+import Post from './Post';
+import Follow from './Follow';
+import Comment from './Comment';
 
 interface UserAttributes {
     id: string,
@@ -13,7 +16,37 @@ interface UserAttributes {
     updatedAt?: Date | null
 }
 
-class User extends Model<UserAttributes> implements UserAttributes {
+export interface UserInput extends Optional<UserAttributes, 'id'> { }
+export interface UserOutput extends Required<UserAttributes> { }
+
+class User extends Model<UserAttributes, UserInput> implements UserAttributes {
+    static associate() {
+        this.hasMany(Post, {
+            foreignKey: 'userId',
+            as: 'user_posts',
+            onDelete: 'CASCADE'
+        });
+        
+        this.hasMany(Follow, {
+            foreignKey: 'followerId',
+            as: 'user_followers',
+            onDelete: 'CASCADE'
+        });
+
+        this.hasMany(Follow, {
+            foreignKey: 'followingId',
+            as: 'user_following',
+            onDelete: 'CASCADE'
+        });
+
+        this.hasMany(Comment, {
+            foreignKey: 'userId',
+            as: 'user_comments',
+            onDelete: 'CASCADE'
+        });
+
+    }
+
     public id!: string;
     public fullname!: string;
     public username!: string;
@@ -67,6 +100,8 @@ User.init(
         timestamps: true
     }
 );
+
+User.associate();
 
 export default User;
 export { db };

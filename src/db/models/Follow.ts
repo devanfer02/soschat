@@ -1,4 +1,4 @@
-import { Model, DataTypes } from 'sequelize';
+import { Model, DataTypes, Optional } from 'sequelize';
 import db from '../../config/db'
 import User from './User';
 
@@ -10,19 +10,11 @@ interface FollowAttributes {
     updatedAt?: Date | null
 }
 
-class Follow extends Model<FollowAttributes> implements FollowAttributes {
-    static associate() {
-        this.belongsTo(User, {
-            foreignKey: 'followerId',
-            as: 'followers',
-            onDelete: 'CASCADE'
-        });
+export interface FollowInput extends Optional<FollowAttributes, 'id'> { }
+export interface FollowOutput extends Required<FollowAttributes> { }
 
-        this.belongsTo(User, {
-            foreignKey: 'followingId',
-            as: 'following',
-            onDelete: 'CASCADE'
-        });
+class Follow extends Model<FollowAttributes, FollowInput> implements FollowAttributes {
+    static associate() {
     }
 
     public id!: number;
@@ -57,6 +49,8 @@ Follow.init(
         timestamps: true
     }
 );
+
+Follow.associate();
 
 export default Follow;
 export { db };

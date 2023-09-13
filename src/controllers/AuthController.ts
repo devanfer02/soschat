@@ -1,14 +1,13 @@
 import { Request, Response } from "express";
 import { v4 as uuidv4 } from 'uuid';
 import { Op } from "sequelize";
-import jwt from 'jsonwebtoken';
 
 import User from "../db/models/User";
 import status from "../helpers/status";
 import { createResponse, createResponseErr } from "../helpers/response";
 import { hashPassword, comparePassword } from "../helpers/bcrypt";
-import env from "../config/env";
-import { generateToken, verifyToken } from "../helpers/jwt";
+import { generateToken } from "../helpers/jwt";
+import env  from "../config/env";
 
 export const registerUser = async (req: Request, res: Response): Promise<Response> => {
     const id = uuidv4();
@@ -62,11 +61,18 @@ export const loginUser = async (req: Request, res: Response): Promise<Response> 
             return createResponse(res, status.Unauthorized, 'invalid user or password');
         }
 
-        const token = generateToken({id: user.id, fullname: user.fullname, email: user.email});
-        res.cookie("accessToken", token, {
+        const accessToken = generateToken({id: user.id, fullname: user.fullname, email: user.email}, '5s', env.jwtToken);
+        const refreshToken = generateToken({id: user.id, fullname: user.fullname, email: user.email, refresh: true}, '2d', env.refreshToken);
+
+        res.cookie("accessToken", accessToken, {
             maxAge: 30000,
             httpOnly: true 
-        })
+        });
+
+        res.cookie("refreshToken", refreshToken, {
+            maxAge: 172800000,
+            httpOnly: true
+        });
 
         return createResponse(res, status.Ok, 'user successfully login');
     } catch (error) {
@@ -79,7 +85,15 @@ export const logoutUser = async (req: Request, res: Response): Promise<Response>
         res.cookie("accessToken", undefined, {
             maxAge: 0,
             httpOnly: true
+        });
+
+        req.session!.destroy((error) => {
+            if (error) {
+                console.log(error);
+            }
         })
+
+        req.session!.user = null;
 
         return createResponse(res, status.Ok, 'user successfully logout');
     } catch (error) {

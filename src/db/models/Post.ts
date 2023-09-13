@@ -1,6 +1,6 @@
-import { Model, DataTypes } from 'sequelize'
+import { Model, DataTypes, Optional } from 'sequelize'
 import db from '../../config/db'
-import User from './User'
+import Comment from './Comment';
 
 interface PostAttributes {
     id: string,
@@ -14,13 +14,16 @@ interface PostAttributes {
     updatedAt? : Date | null
 }
 
-class Post extends Model<PostAttributes> implements PostAttributes {
+export interface PostInput extends Optional<PostAttributes, 'id'> { }
+export interface PostOutput extends Required<PostAttributes> { }
+
+class Post extends Model<PostAttributes, PostInput> implements PostAttributes {
     static associate() {
-        this.belongsTo(User, {
-            foreignKey: 'userId',
-            as: 'user',
+        this.hasMany(Comment, {
+            foreignKey: 'postId',
+            as: 'post_comments',
             onDelete: 'CASCADE'
-        });
+        })
     }
 
     public id!: string;
@@ -74,6 +77,8 @@ Post.init(
         timestamps: true
     }
 );
+
+Post.associate();
 
 export default Post;
 export { db };

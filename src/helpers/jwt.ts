@@ -1,22 +1,21 @@
 import jwt from 'jsonwebtoken';
-import env from '../config/env';
 
-interface InfoToken {
+export interface InfoToken {
     payload: string | jwt.JwtPayload | null
-    expired: boolean | string
+    expired: boolean
 }
 
-export const generateToken = (data: string | object): string => {
-    const token = jwt.sign(data, env.jwtToken, {
-        expiresIn: '4h'
+export const generateToken = (data: string | object, expiresIn: string, secret_token: string): string => {
+    const token = jwt.sign(data, secret_token, {
+        expiresIn
     });
 
     return token;
 }
 
-export const verifyToken = (token: string): InfoToken => {
+export const verifyToken = (token: string, secret_token: string): InfoToken => {
     try {
-        const decoded = jwt.verify(token, env.jwtToken)
+        const decoded = jwt.verify(token, secret_token);
         
         const info: InfoToken = {
             payload: decoded,

@@ -1,4 +1,4 @@
-import { Model, DataTypes } from 'sequelize';
+import { Model, DataTypes, Optional } from 'sequelize';
 import db from '../../config/db'
 import User from './User';
 import Post from './Post';
@@ -11,19 +11,12 @@ interface CommentAttributes {
     updatedAt?: Date | null
 }
 
-class Comment extends Model<CommentAttributes> implements CommentAttributes {
-    static associate() {
-        this.belongsTo(User, {
-            foreignKey: 'userId',
-            as: 'user',
-            onDelete: 'CASCADE'
-        });
+export interface CommentInput extends Optional<CommentAttributes, 'id'> { }
+export interface CommentOutput extends Required<CommentAttributes> { }
 
-        this.belongsTo(Post, {
-            foreignKey: 'postId',
-            as: 'post',
-            onDelete: 'CASCADE'
-        });
+class Comment extends Model<CommentAttributes, CommentInput> implements CommentAttributes {
+    static associate() {
+
     }
 
     public id!: number;

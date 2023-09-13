@@ -7,17 +7,18 @@ const throwUndefinedEnv = (message: string) => {
 };
 
 interface Env {
-    apiKey      : string
-    apiKeyName  : string
-    serverPort  : number
-    dbName      : string
-    dbUsername  : string
-    dbPassword  : string
-    dbHost      : string
-    dbDialect   : string
-    saltRounds  : number
-    sessionKey  : string
-    jwtToken      : string
+    apiKey       : string
+    apiKeyName   : string
+    serverPort   : number
+    dbName       : string
+    dbUsername   : string
+    dbPassword   : string
+    dbHost       : string
+    dbDialect    : string
+    saltRounds   : number
+    sessionKey   : string
+    jwtToken     : string
+    refreshToken : string
 };
 
 const env: Env = {
@@ -32,6 +33,7 @@ const env: Env = {
     saltRounds  : process.env.SALT_ROUND ? parseInt(process.env.SALT_ROUND!) : throwUndefinedEnv('SALT_ROUND is undefined'),
     sessionKey  : process.env.SESSION_KEY ? process.env.SESSION_KEY : throwUndefinedEnv('SESSION_KEY is undefined'),
     jwtToken    : process.env.JWT_TOKEN ? process.env.JWT_TOKEN : throwUndefinedEnv('JWT_TOKEN is undefined'),
+    refreshToken: process.env.REFRESH_TOKEN ? process.env.REFRESH_TOKEN : throwUndefinedEnv('REFRESH_TOKEN is undefined')
 };
 
 export default env;
