@@ -2,30 +2,37 @@ import { Request, Response } from "express";
 import { v4 as uuidv4 } from 'uuid';
 
 import Post from "../db/models/Post";
-import { createResponse } from "../helpers/response"
+import { createResponse, createResponseErr } from "../helpers/response"
+import status from "../helpers/status";
 
 export const getAllPosts = async (req: Request, res: Response): Promise<Response> => {    
     try {
-        const record = await Post.findAll();
+        const posts = await Post.findAll();
 
-        return createResponse(res, 200, "successfully fetch data", record);
+        return createResponse(res, status.Ok, "successfully fetch data", posts);
     } catch (error) {
-        console.log(error);
-        return createResponse(res, 500, 'internal server error');
+        return createResponseErr(res, status.ServerError, 'internal server error', error as Error)
+    }
+}
+
+export const getFollowedPost = async (req: Request, res: Response): Promise<Response> => {
+    const { id } = req.session!.user
+    try {
+        return createResponse(res, status.Ok, "successfully fetch data", null);
+    } catch (error) {
+        return createResponseErr(res, status.ServerError, 'internal server error', error as Error)
     }
 }
 
 export const createPost = async (req: Request, res: Response): Promise<Response> => {
     const id = uuidv4();
+    const { userId } = req.session!.user
     try {
-        const userId = req.session!.user.id;
-        
-        const record = await Post.create({...req.body, id, userId});
+        const posts = await Post.create({...req.body, id, userId});
 
-        return createResponse(res, 201, "successfully create new post", record);
+        return createResponse(res, status.Created, "successfully create new post", posts);
     } catch (error) {
-        console.log(error);
-        return createResponse(res, 500, 'internal server error');
+        return createResponseErr(res, status.ServerError, 'internal server error', error as Error)
     }
 }
 
@@ -53,10 +60,9 @@ export const updatePost = async (req: Request, res: Response): Promise<Response>
             }
         });
 
-        return createResponse(res, 201, 'successfully update post');
+        return createResponse(res, status.Created, 'successfully update post');
     } catch (error) {
-        console.log(error);
-        return createResponse(res, 500, 'internal server error');
+        return createResponseErr(res, status.ServerError, 'internal server error', error as Error)
     }
 }
 
@@ -70,9 +76,8 @@ export const deletePost = async (req: Request, res: Response): Promise<Response>
             }
         });
 
-        return createResponse(res, 201, 'successfully deleted post');
+        return createResponse(res, status.Ok, 'successfully deleted post');
     } catch (error) {
-        console.log(error);
-        return createResponse(res, 500, 'internal server error');
+        return createResponseErr(res, status.ServerError, 'internal server error', error as Error)
     }
 }

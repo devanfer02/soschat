@@ -12,6 +12,7 @@ import apiKeyInterceptor from './middlewares/ApiKeyInterceptor';
 import PostRoutes from './routes/PostRoutes';
 import AuthRoutes from './routes/AuthRoutes';
 import UserRoutes from './routes/UserRoutes';
+import FollowRoutes from './routes/FollowRoutes'
 import { deserializeUser } from './middlewares/Auth';
 
 db.sync().then(() => {
@@ -42,6 +43,7 @@ app.use(AuthRoutes);
 app.use(deserializeUser);
 app.use(PostRoutes);
 app.use(UserRoutes);
+app.use(FollowRoutes);
 
 app.listen( env.serverPort, () => {
     console.log(`server is running at http://localhost:${env.serverPort}`);
