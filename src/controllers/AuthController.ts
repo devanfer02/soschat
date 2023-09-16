@@ -93,8 +93,6 @@ export const logoutUser = async (req: Request, res: Response): Promise<Response>
             }
         })
 
-        req.session!.user = null;
-
         return createResponse(res, status.Ok, 'user successfully logout');
     } catch (error) {
         return createResponseErr(res, status.ServerError, 'internal server error', error as Error);
