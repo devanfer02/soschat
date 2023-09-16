@@ -2,6 +2,7 @@ import express from 'express';
 import {
     getAllUsers,
     getUserByUsername,
+    searchUser,
     updateUser,
     deleteUser
 } from '../controllers/UserController';
@@ -13,6 +14,7 @@ const router = express.Router();
 
 router.get('/api/users', getAllUsers);
 router.get('/api/users/:username', getUserByUsername);
+router.get('/api/users/search/:search', searchUser)
 router.patch(
     '/api/users',
     requireUser,

@@ -2,10 +2,11 @@ import { Model, DataTypes, Optional } from 'sequelize';
 import db from '../../config/db'
 
 interface CommentAttributes {
-    id: number,
-    postId: string,
+    id: number
+    postId: string
     userId: string
-    createdAt?: Date | null,
+    content: string
+    createdAt?: Date | null
     updatedAt?: Date | null
 }
 
@@ -20,6 +21,7 @@ class Comment extends Model<CommentAttributes, CommentInput> implements CommentA
     public id!: number;
     public postId!: string;
     public userId!: string;
+    public content!: string
     public createdAt?: Date | null | undefined;
     public updatedAt?: Date | null | undefined;
     
@@ -28,16 +30,19 @@ class Comment extends Model<CommentAttributes, CommentInput> implements CommentA
 Comment.init(
     {
         id: {
-            type: DataTypes.INTEGER,
+            type: DataTypes.STRING,
             allowNull: false,
             primaryKey: true,
-            autoIncrement: true
         },
         postId: {
             type: DataTypes.STRING,
             allowNull: false
         },
         userId: {
+            type: DataTypes.STRING,
+            allowNull: false
+        },
+        content: {
             type: DataTypes.STRING,
             allowNull: false
         }

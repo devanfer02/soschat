@@ -4,6 +4,7 @@ import { createResponse, createResponseErr } from '../helpers/response';
 import Post from '../db/models/Post';
 import status from '../helpers/status';
 import { hashPassword } from '../helpers/bcrypt';
+import { Op } from 'sequelize';
 
 export const getAllUsers = async (req: Request, res: Response): Promise<Response> => {
     try {
@@ -45,6 +46,26 @@ export const getUserByUsername = async (req: Request, res: Response): Promise<Re
     }
 };
 
+export const searchUser = async (req: Request, res: Response): Promise<Response> => {
+    const { search } = req.params;
+    try {
+        const users = await User.findAll({
+            where: {
+                username: {
+                    [Op.like]: `%${search}%`  
+                }
+            }, 
+            attributes: {
+                exclude: ['password']
+            }
+        })
+
+        return createResponse(res, status.Ok, 'successfully fetch user', users);
+    } catch (error) {
+        return createResponse(res, status.ServerError, 'internal server error');
+    }
+} 
+
 export const updateUser = async (req: Request, res: Response): Promise<Response> => {
     const { id } = req.session!.user
     const { fullname, username, email, password } = req.body
@@ -83,7 +104,7 @@ export const deleteUser = async (req: Request, res: Response): Promise<Response>
             }
         })
 
-        return createResponse(res, status.Ok, 'successfully delete user data')
+        return createResponse(res, status.Ok, 'successfully delete user')
     } catch (error) {
         return createResponseErr(res, status.ServerError, 'internal server error', error as Error);
     }

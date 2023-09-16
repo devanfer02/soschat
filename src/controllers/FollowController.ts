@@ -44,6 +44,10 @@ export const followUser = async (req: Request, res: Response): Promise<Response>
             return createResponseErr(res, status.BadRequest, 'user already followed', new Error('followed already'))
         }
 
+        if (followId === id) {
+            return createResponseErr(res, status.BadRequest, 'cant follow self', new Error('self follow attempt'))
+        }
+
         const record = await Follow.create({
             followerId: id,
             followingId: followId
