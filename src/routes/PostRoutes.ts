@@ -1,11 +1,13 @@
 import express from 'express';
-import { postValidator } from '../validators/validator.class';
+import { genericValidator, postValidator } from '../validators/validator.class';
 import { validatorHandler } from '../validators/validator.handler';
 import {
     getAllPosts,
     createPost,
     deletePost,
-    updatePost
+    updatePost,
+    getFollowedPost,
+    getUserPosts
 } from '../controllers/PostController'
 import { requireUser } from '../middlewares/Auth';
 
@@ -16,10 +18,22 @@ router.get(
     getAllPosts
 );
 
+router.get(
+    '/api/posts/feed',
+    requireUser,
+    getFollowedPost
+);
+
+router.get(
+    '/api/posts/my',
+    requireUser,
+    getUserPosts
+);
+
 router.post(
     '/api/posts',
     requireUser,
-    postValidator.checkPostForm(), 
+    postValidator.validateCreateForm(), 
     validatorHandler,
     createPost
 );
@@ -27,7 +41,7 @@ router.post(
 router.patch(
     '/api/posts/:id',
     requireUser,
-    postValidator.checkPostId(),
+    genericValidator.validateParam('id'),
     validatorHandler,
     updatePost
 );
@@ -35,7 +49,7 @@ router.patch(
 router.delete(
     '/api/posts/:id',
     requireUser,
-    postValidator.checkPostId(),
+    genericValidator.validateParam('id'),
     validatorHandler,
     deletePost
 );

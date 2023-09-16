@@ -11,14 +11,14 @@ const router = express.Router();
 
 router.post(
     '/api/auth/register', 
-    userValidator.checkUserRegisterForm(), 
+    userValidator.validateRegisterForm(), 
     validatorHandler,
     registerUser,
 );
 
 router.post(
     '/api/auth/login',
-    userValidator.checkUserLoginForm(),
+    userValidator.validateLoginForm(),
     validatorHandler,
     loginUser,
 );

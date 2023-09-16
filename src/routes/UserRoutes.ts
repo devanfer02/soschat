@@ -6,19 +6,32 @@ import {
     updateUser,
     deleteUser
 } from '../controllers/UserController';
-import { userValidator } from '../validators/validator.class';
+import { genericValidator, userValidator } from '../validators/validator.class';
 import { validatorHandler } from '../validators/validator.handler';
 import { requireUser } from '../middlewares/Auth';
 
 const router = express.Router();
 
 router.get('/api/users', getAllUsers);
-router.get('/api/users/:username', getUserByUsername);
-router.get('/api/users/search/:search', searchUser)
+
+router.get(
+    '/api/users/:username',
+    genericValidator.validateParam('username'),
+    validatorHandler,
+    getUserByUsername
+);
+
+router.get(
+    '/api/users/search/:search',
+    genericValidator.validateParam('search'),
+    validatorHandler,
+    searchUser
+)
+
 router.patch(
     '/api/users',
     requireUser,
-    userValidator.checkUserUpdateForm(),
+    userValidator.validateUpdateForm(),
     validatorHandler,
     updateUser
 );

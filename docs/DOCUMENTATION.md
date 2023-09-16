@@ -27,6 +27,7 @@ This api also use validator for request body, the response message is clear enou
     Attributes: title, description, image, comments, liked
 3. Comment
     Attributes: content
+
 For more details, looks up [models](../src/db/models/) directory
 
 ## Request
@@ -189,7 +190,7 @@ For more details, looks up [models](../src/db/models/) directory
     endpoint : ```/api/users```        
     method : ```PATCH```      
     json request body :     
-    NOTE: not all required     
+    NOTE: not all fields are required     
     ```
     {
         "fullname": "Rivaldo",
@@ -247,4 +248,213 @@ For more details, looks up [models](../src/db/models/) directory
     }
     ```
 
+3. ##### Get Followings
+    endpoint : ```/api/followings```     
+    method : ```GET```     
+    json response : 
+    ```
+    {
+        "status": 200,
+        "message": "successfully fetch followings",
+        "data": [
+            {
+                "id": "bce601de-0ceb-42b7-8abc-eef2590d3020",
+                "fullname": "Ananta",
+                "username": "nanta10",
+                "email": "risky@gmail.com",
+                "following": 0,
+                "followers": 2,
+                "createdAt": "2023-09-16T10:07:04.000Z",
+                "updatedAt": "2023-09-16T15:46:32.000Z"
+            },
+            {
+                "id": "d7a133bc-e8d9-4626-a23c-87601f33ca22",
+                "fullname": "Devan F",
+                "username": "dvnnnfr",
+                "email": "dnv10@gmail.com",
+                "following": 1,
+                "followers": 1,
+                "createdAt": "2023-09-16T13:51:10.000Z",
+                "updatedAt": "2023-09-16T15:46:47.000Z"
+            }
+        ]
+    }
+    ```
+
+4. ##### Get Followers
+    endpoint : ```/api/followers```    
+    method : ```GET```      
+    json response : 
+    ```
+    {
+        "status": 200,
+        "message": "successfully fetch followers",
+        "data": [
+            {
+                "id": "2d2433a1-046e-438e-b1ab-a2a0f94a6159",
+                "fullname": "Rivaldo",
+                "username": "aldoo123",
+                "email": "aldo@gmail.com",
+                "following": 2,
+                "followers": 0,
+                "createdAt": "2023-09-16T15:44:44.000Z",
+                "updatedAt": "2023-09-16T15:46:47.000Z"
+            }
+        ]
+    }
+    ```
+
 ### Post
+1. ##### Get All Post
+    endpoint : ```/api/posts```      
+    method : ```GET```       
+    json response : 
+    ```
+    {
+        "status": 200,
+        "message": "successfully fetch data",
+        "data": [
+            {
+                "id": "1b5f6751-eba1-4246-90a5-ba11f695a140",
+                "userId": "7bb0869a-ff6e-4018-b2c0-5661c3d50a26",
+                "title": "aku",
+                "desc": "acaa",
+                "image": null,
+                "liked": 0,
+                "comments": 0,
+                "createdAt": "2023-09-13T03:43:26.000Z",
+                "updatedAt": "2023-09-13T03:43:26.000Z"
+            },
+            {
+                "id": "b3a9778d-3cd3-4272-a60b-b5c22c5e95df",
+                "userId": "7bb0869a-ff6e-4018-b2c0-5661c3d50a26",
+                "title": "aku",
+                "desc": "acaa",
+                "image": null,
+                "liked": 0,
+                "comments": 0,
+                "createdAt": "2023-09-13T03:32:04.000Z",
+                "updatedAt": "2023-09-13T03:32:04.000Z"
+            }
+        ]
+    }
+    ```
+
+2. ##### Get User Following's Post
+    endpoint : ```/api/posts/feed```     
+    method : ```GET```       
+    json response : 
+    ```
+    {
+        "status": 200,
+        "message": "successfully fetch following's post",
+        "data": [
+            {
+                "id": "e82bd47f-6c32-4144-92ef-d284ae41a88c",
+                "userId": "d7a133bc-e8d9-4626-a23c-87601f33ca22",
+                "title": "keluh kesah oprec asprak",
+                "desc": "knp harus dari ipk, oprecnya males bgt ajg",
+                "image": null,
+                "liked": 0,
+                "comments": 0,
+                "createdAt": "2023-09-16T16:07:53.000Z",
+                "updatedAt": "2023-09-16T16:07:53.000Z"
+            }
+        ]
+    }
+    ```
+
+3. ##### Get User's Posts
+    endpoint : ```/api/posts/my```    
+    method : ```GET```      
+    json response : 
+    ```
+    {
+    "status": 200,
+    "message": "successfully fetch user posts",
+    "data": [
+            {
+                "id": "ba2d16ce-aa45-42f8-968a-7c9b34c066ee",
+                "userId": "d7a133bc-e8d9-4626-a23c-87601f33ca22",
+                "title": "keluh kesah oprec asprak",
+                "desc": "knp harus dari ipk, oprecnya males bgt ajg",
+                "image": null,
+                "liked": 0,
+                "comments": 0,
+                "createdAt": "2023-09-16T16:33:45.000Z",
+                "updatedAt": "2023-09-16T16:33:45.000Z"
+            },
+            {
+                "id": "e82bd47f-6c32-4144-92ef-d284ae41a88c",
+                "userId": "d7a133bc-e8d9-4626-a23c-87601f33ca22",
+                "title": "gass kader adting ke bcc",
+                "desc": "yjja, yang jago jago aja wkwkwk",
+                "image": null,
+                "liked": 0,
+                "comments": 0,
+                "createdAt": "2023-09-16T16:07:53.000Z",
+                "updatedAt": "2023-09-16T16:07:53.000Z"
+            }
+        ]
+    }
+    ```
+
+4. ##### Create Post
+    endpoint : ```/api/posts```        
+    method : ```POST```       
+    json request body : 
+    ```
+    {
+        "title": "keluh kesah oprec asprak",
+        "desc": "knp harus dari ipk, oprecnya males bgt ajg"
+    }
+    ```
+    json response : 
+    ```
+    {
+        "status": 201,
+        "message": "successfully create new post",
+        "data": {
+            "liked": 0,
+            "comments": 0,
+            "title": "keluh kesah oprec asprak",
+            "desc": "knp harus dari ipk, oprecnya males bgt ajg",
+            "id": "e82bd47f-6c32-4144-92ef-d284ae41a88c",
+            "userId": "d7a133bc-e8d9-4626-a23c-87601f33ca22",
+            "updatedAt": "2023-09-16T16:07:53.714Z",
+            "createdAt": "2023-09-16T16:07:53.714Z"
+        }
+    }
+    ```
+
+4. ##### Update Post
+    endpoint : ```/api/posts/{id}```       
+    method : ```PATCH```
+    json request body :       
+    NOTE: not all fields are required     
+    ```
+    {
+        "title": "gass kader adting ke bcc",
+        "desc": "yjja, yang jago jago aja wkwkwk",
+        "comments": 1,
+        "liked": 1
+    }
+    ```
+    json response : 
+    ```
+    {
+        "status": 201,
+        "message": "successfully update post"
+    }
+    ```
+
+5. ##### Delete Post
+    endpoint : ```/api/posts/{id}```      
+    method : ```DELETE```       
+    json response : 
+    ```
+    {
+        "status": 200,
+        "message": "successfully deleted post"
+    }
+    ```

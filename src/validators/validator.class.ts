@@ -1,7 +1,7 @@
 import { body, param } from 'express-validator';
 
 class UserValidator {
-    checkUserRegisterForm() {
+    validateRegisterForm() {
         return [
             body("fullname").
             trim().
@@ -26,7 +26,7 @@ class UserValidator {
         ];
     }
 
-    checkUserLoginForm() {
+    validateLoginForm() {
         return [
             body("username").
             notEmpty().
@@ -37,7 +37,7 @@ class UserValidator {
         ];
     }
 
-    checkUserUpdateForm() {
+    validateUpdateForm() {
         return [
             body("fullname").
             optional().
@@ -68,7 +68,7 @@ class UserValidator {
 }
 
 class PostValidator {
-    checkPostForm() {
+    validateCreateForm() {
         return [
             body("title"). 
             trim().
@@ -80,17 +80,20 @@ class PostValidator {
             withMessage("desc value shouldn't be empty")
         ]
     }
-
-    checkPostId() {
-        return [
-            param("id"). 
-            trim().
-            notEmpty().
-            withMessage("param id shouldn't be empty")
-        ]
-    }
 }
 
-export const userValidator = new UserValidator();
-export const postValidator = new PostValidator();
+class GenericValidator {
+    validateParam(value: string) {
+        return [
+            param(value).
+            trim().
+            notEmpty(). 
+            withMessage(`param ${value} shouldn't be empty`)
+        ]
+    }
 
+}
+
+export const userValidator        = new UserValidator();
+export const postValidator        = new PostValidator();
+export const genericValidator     = new GenericValidator();

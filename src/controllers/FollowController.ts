@@ -33,7 +33,7 @@ export const followUser = async (req: Request, res: Response): Promise<Response>
 
         const relation = await Follow.findOne({
             where: {
-                [Op.or]: [
+                [Op.and]: [
                     {followerId: id},
                     {followingId: followId}
                 ]
@@ -53,8 +53,11 @@ export const followUser = async (req: Request, res: Response): Promise<Response>
             followingId: followId
         });
 
+        const followingTotal = user.following! + 1
+        const followersTotal = follow.followers! + 1
+
         await User.update({
-            following: user.following! + 1
+            following: followingTotal
         }, {
             where: {
                 id
@@ -62,7 +65,7 @@ export const followUser = async (req: Request, res: Response): Promise<Response>
         });
 
         await User.update({
-            followers: user.followers! + 1
+            followers: followersTotal
         }, {
             where: {
                 id: followId
@@ -129,6 +132,62 @@ export const unfollowUser = async (req: Request, res: Response): Promise<Respons
 
         return createResponse(res, status.Created, 'successfully unfollow user');
     } catch (error) {
+        return createResponseErr(res, status.ServerError, 'internal server error', error as Error)
+    }
+}
+
+export const getFollowers = async (req: Request, res: Response): Promise<Response> => {
+    const { id } = req.session!.user 
+    try {
+        const followers = await Follow.findAll({
+            where: {
+                followingId: id
+            }
+        });
+    
+        const followerIds = followers.map(follower => follower.followerId);
+    
+        const users = await User.findAll({
+            where: {
+                id: {
+                    [Op.in]: followerIds
+                }
+            },
+            attributes: {
+                exclude: ['password']
+            }
+        });
+
+        return createResponse(res, status.Ok, 'successfully fetch followers', users);        
+    }  catch (error) {
+        return createResponseErr(res, status.ServerError, 'internal server error', error as Error)
+    }
+}
+
+export const getFollowings = async (req: Request, res: Response): Promise<Response> => {
+    const { id } = req.session!.user 
+    try {
+        const followings = await Follow.findAll({
+            where: {
+                followerId: id
+            }
+        });
+    
+        const followingIds = followings.map(following => following.followingId);
+    
+        const users = await User.findAll({
+            where: {
+                id: {
+                    [Op.in]: followingIds
+                }
+            },
+            attributes: {
+                exclude: ['password']
+            }
+        });
+
+        return createResponse(res, status.Ok, 'successfully fetch followings', users);        
+    }  catch (error) {
         return createResponseErr(res, status.ServerError, 'internal server error', error as Error)
     }
 }

@@ -4,12 +4,32 @@ import { v4 as uuidv4 } from 'uuid';
 import Post from "../db/models/Post";
 import { createResponse, createResponseErr } from "../helpers/response"
 import status from "../helpers/status";
+import Follow from "../db/models/Follow";
+import { Op } from "sequelize";
 
 export const getAllPosts = async (req: Request, res: Response): Promise<Response> => {    
     try {
         const posts = await Post.findAll();
 
-        return createResponse(res, status.Ok, "successfully fetch data", posts);
+        return createResponse(res, status.Ok, "successfully fetch posts", posts);
+    } catch (error) {
+        return createResponseErr(res, status.ServerError, 'internal server error', error as Error)
+    }
+}
+
+export const getUserPosts = async (req: Request, res: Response): Promise<Response> => {
+    const { id } = req.session!.user
+    try {
+        const posts = await Post.findAll({
+            where: {
+                userId: id
+            },
+            order: [
+                ['createdAt', 'DESC']
+            ]
+        });
+
+        return createResponse(res, status.Ok, "successfully fetch user posts", posts);
     } catch (error) {
         return createResponseErr(res, status.ServerError, 'internal server error', error as Error)
     }
@@ -18,7 +38,26 @@ export const getAllPosts = async (req: Request, res: Response): Promise<Response
 export const getFollowedPost = async (req: Request, res: Response): Promise<Response> => {
     const { id } = req.session!.user
     try {
-        return createResponse(res, status.Ok, "successfully fetch data", null);
+        const followings = await Follow.findAll({
+            where: {
+                followerId: id
+            }
+        });
+
+        const followingIds = followings.map((following => following.followingId))
+
+        const posts = await Post.findAll({
+            where: {
+                userId: {
+                    [Op.in]: followingIds
+                }
+            },
+            order: [
+                ['createdAt', 'DESC']
+            ]
+        });
+
+        return createResponse(res, status.Ok, "successfully fetch following's post", posts);
     } catch (error) {
         return createResponseErr(res, status.ServerError, 'internal server error', error as Error)
     }
@@ -26,7 +65,7 @@ export const getFollowedPost = async (req: Request, res: Response): Promise<Resp
 
 export const createPost = async (req: Request, res: Response): Promise<Response> => {
     const id = uuidv4();
-    const { userId } = req.session!.user
+    const userId = req.session!.user.id
     try {
         const posts = await Post.create({...req.body, id, userId});
 
@@ -38,23 +77,15 @@ export const createPost = async (req: Request, res: Response): Promise<Response>
 
 export const updatePost = async (req: Request, res: Response): Promise<Response> => {
     const { id } = req.params;
-    const { title, desc } = req.body;
 
     try {
         const post = await Post.findByPk(id);
 
         if (post === null) {
-            return createResponse(res, 409, 'post not found');
+            return createResponse(res, status.NoContent, 'post not found');
         }
 
-        const updatedPost = {
-            id: post.id,
-            userId: post.userId,
-            title: title === undefined? post.title : title,
-            desc: desc === undefined? post.desc : desc
-        }
-
-        await Post.update({...updatedPost},{
+        await Post.update(req.body , {
             where: {
                 id
             }
