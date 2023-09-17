@@ -14,7 +14,8 @@ module.exports = {
         references: {
             model: 'Posts',
             key: 'id'
-        }
+        },
+        onDelete: 'CASCADE'
       },
       userId: {
         type: Sequelize.STRING,
@@ -22,8 +23,8 @@ module.exports = {
         references: {
             model: 'Users',
             key: 'id'
-
-        }
+        },
+        onDelete: 'CASCADE'
       },
       commentId: {
         type: Sequelize.STRING,
@@ -31,7 +32,8 @@ module.exports = {
         references: {
             model: 'Comments',
             key: 'id',
-        }
+        },
+        onDelete: 'CASCADE'
       },
       content: {
         type: Sequelize.STRING,

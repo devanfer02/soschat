@@ -46,11 +46,13 @@ Comment.init(
         },
         postId: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            onDelete: 'CASCADE'
         },
         userId: {
             type: DataTypes.STRING,
-            allowNull: false
+            allowNull: false,
+            onDelete: 'CASCADE'
         },
         commentId: {
             type: DataTypes.STRING,

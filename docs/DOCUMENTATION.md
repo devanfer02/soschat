@@ -556,5 +556,8 @@ For more details, looks up [models](../src/db/models/) directory
     method : ```DELETE```      
     json response : 
     ```
-    
+    {
+        "status": 200,
+        "message": "successfully delete comment"
+    }
     ```

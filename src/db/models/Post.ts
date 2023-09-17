@@ -47,7 +47,8 @@ Post.init(
         }, 
         userId: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            allowNull: false,
+            onDelete: 'CASCADE'
         },
         title: {
             type: DataTypes.STRING,
