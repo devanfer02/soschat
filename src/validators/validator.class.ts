@@ -82,6 +82,17 @@ class PostValidator {
     }
 }
 
+class CommentValidator {
+    validateCreateComment() {
+        return [
+            body("content").
+            trim().
+            notEmpty(). 
+            withMessage("content value should'n be empty")
+        ]
+    }
+}
+
 class GenericValidator {
     validateParam(value: string) {
         return [
@@ -97,3 +108,4 @@ class GenericValidator {
 export const userValidator        = new UserValidator();
 export const postValidator        = new PostValidator();
 export const genericValidator     = new GenericValidator();
+export const commentValidator     = new CommentValidator();

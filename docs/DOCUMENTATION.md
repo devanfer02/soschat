@@ -35,6 +35,7 @@ For more details, looks up [models](../src/db/models/) directory
 2. [User](#user)
 3. [Follow](#follow)
 4. [Post](#post)
+5. [Comment](#comment)
 
 ### Auth
 1. ##### Register User
@@ -457,4 +458,103 @@ For more details, looks up [models](../src/db/models/) directory
         "status": 200,
         "message": "successfully deleted post"
     }
+    ```
+
+### Comment
+1. ##### Create Post Comment
+    endpoint : ```/api/comments/post/{postId}```      
+    method : ```POST```    
+    json request body : 
+    ```
+    {
+        "content": "ya sabar bang, next time gas semester 2"
+    }
+    ```
+    json response :
+    ```
+    {
+        "status": 201,
+        "message": "successfully create comment",
+        "data": {
+            "liked": 0,
+            "totalChained": 0,
+            "id": "868a4f31-4b0a-4242-8b7c-756a17405527",
+            "userId": "7d6205ec-d520-4cf4-ba08-0d02591aab3a",
+            "postId": "c18805c8-4765-47ed-a5ba-fa669829d99b",
+            "content": "ya sabar bang, next time gas semester 2",
+            "updatedAt": "2023-09-17T08:04:48.241Z",
+            "createdAt": "2023-09-17T08:04:48.241Z"
+        }
+    }
+    ```
+
+2. ##### Create Chained Comment  
+    endpoint : ```/api/comments/reply/{commentId}```    
+    method : ```POST```      
+    json request body : 
+    ```
+    {
+        "content": "aminnn, ngambil tif aja hihihi"
+    }
+    ```
+    json response  : 
+    ```
+    {
+        "status": 201,
+        "message": "successfully create chained comment",
+        "data": {
+            "liked": 0,
+            "totalChained": 0,
+            "id": "4fe92077-04e9-41e4-b297-dc95de4e29d6",
+            "userId": "83bd2636-8120-4fc8-9a7e-62c27bfb1211",
+            "postId": "c18805c8-4765-47ed-a5ba-fa669829d99b",
+            "commentId": "868a4f31-4b0a-4242-8b7c-756a17405527",
+            "content": "aminnn, ngambil tif aja hihihi",
+            "updatedAt": "2023-09-17T08:07:19.337Z",
+            "createdAt": "2023-09-17T08:07:19.337Z"
+        }
+    }
+    ```
+
+3. ##### Get Post Comments
+    endpoint : ```/api/comments/post/{postId}```      
+    method : ```GET```    
+    json response :
+    ```
+    {
+        "status": 200,
+        "message": "successfully fetch post comments",
+        "data": [
+            {
+                "id": "4fe92077-04e9-41e4-b297-dc95de4e29d6",
+                "postId": "c18805c8-4765-47ed-a5ba-fa669829d99b",
+                "userId": "83bd2636-8120-4fc8-9a7e-62c27bfb1211",
+                "commentId": "868a4f31-4b0a-4242-8b7c-756a17405527",
+                "content": "aminnn, ngambil tif aja hihihi",
+                "liked": 0,
+                "totalChained": 0,
+                "createdAt": "2023-09-17T08:07:19.000Z",
+                "updatedAt": "2023-09-17T08:07:19.000Z"
+            },
+            {
+                "id": "868a4f31-4b0a-4242-8b7c-756a17405527",
+                "postId": "c18805c8-4765-47ed-a5ba-fa669829d99b",
+                "userId": "7d6205ec-d520-4cf4-ba08-0d02591aab3a",
+                "commentId": null,
+                "content": "ya sabar bang, next time gas semester 2",
+                "liked": 0,
+                "totalChained": 1,
+                "createdAt": "2023-09-17T08:04:48.000Z",
+                "updatedAt": "2023-09-17T08:07:19.000Z"
+            }
+        ]
+    }
+    ```
+
+4. ##### Delete Comment
+    endpoint : ```'/api/comments/:id```   
+    method : ```DELETE```      
+    json response : 
+    ```
+    
     ```

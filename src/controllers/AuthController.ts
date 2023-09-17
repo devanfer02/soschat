@@ -87,6 +87,11 @@ export const logoutUser = async (req: Request, res: Response): Promise<Response>
             httpOnly: true
         });
 
+        res.cookie("refreshToken", undefined, {
+            maxAge: 0,
+            httpOnly: true
+        })
+
         req.session!.destroy((error) => {
             if (error) {
                 console.log(error);

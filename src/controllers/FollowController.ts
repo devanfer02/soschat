@@ -31,6 +31,10 @@ export const followUser = async (req: Request, res: Response): Promise<Response>
             return createResponseErr(res, status.BadRequest, 'follow not found', new Error('follow not found'))
         }
 
+        if (user.id === follow.id) {
+            return createResponseErr(res, status.BadRequest, 'failed to follow', new Error('cannot self follow'))
+        }
+
         const relation = await Follow.findOne({
             where: {
                 [Op.and]: [

@@ -1,11 +1,18 @@
 import { Request, Response } from "express";
 import { v4 as uuidv4 } from 'uuid';
+import { initializeApp } from 'firebase/app'
+import { getStorage, ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage'
 
 import Post from "../db/models/Post";
 import { createResponse, createResponseErr } from "../helpers/response"
 import status from "../helpers/status";
 import Follow from "../db/models/Follow";
 import { Op } from "sequelize";
+import firebaseConfig from "../config/firebase.config";
+
+initializeApp(firebaseConfig);
+
+const storage = getStorage();
 
 export const getAllPosts = async (req: Request, res: Response): Promise<Response> => {    
     try {
@@ -77,9 +84,14 @@ export const createPost = async (req: Request, res: Response): Promise<Response>
 
 export const updatePost = async (req: Request, res: Response): Promise<Response> => {
     const { id } = req.params;
+    const userId = req.session!.user.id;
 
     try {
-        const post = await Post.findByPk(id);
+        const post = await Post.findOne({
+            where: {
+                id, userId
+            }
+        });
 
         if (post === null) {
             return createResponse(res, status.NoContent, 'post not found');
@@ -99,8 +111,21 @@ export const updatePost = async (req: Request, res: Response): Promise<Response>
 
 export const deletePost = async (req: Request, res: Response): Promise<Response> => {
     const { id } = req.params;
+    const userId = req.session!.user.id;
 
     try {
+        const post = await Post.findOne({
+            where: {
+                id, userId
+            }
+        });
+
+        if (post === null) {
+            return createResponseErr(
+                res, status.Forbidden, 'cannot delete post', new Error("forbidden to delete other's user post"
+            ));
+        }
+
         await Post.destroy({
             where: {
                 id

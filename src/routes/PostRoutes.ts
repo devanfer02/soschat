@@ -1,4 +1,5 @@
 import express from 'express';
+import multer from 'multer';
 import { genericValidator, postValidator } from '../validators/validator.class';
 import { validatorHandler } from '../validators/validator.handler';
 import {
@@ -12,6 +13,7 @@ import {
 import { requireUser } from '../middlewares/Auth';
 
 const router = express.Router();
+const upload = multer({storage: multer.memoryStorage()});
 
 router.get(
     '/api/posts',
@@ -33,6 +35,7 @@ router.get(
 router.post(
     '/api/posts',
     requireUser,
+    upload.single('filename'),
     postValidator.validateCreateForm(), 
     validatorHandler,
     createPost
@@ -41,6 +44,7 @@ router.post(
 router.patch(
     '/api/posts/:id',
     requireUser,
+    upload.single('filename'),
     genericValidator.validateParam('id'),
     validatorHandler,
     updatePost

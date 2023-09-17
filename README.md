@@ -9,3 +9,4 @@ You can read [documentation](./docs/DOCUMENTATION.md) for more details about how
 2. Typescript
 3. MySQL
 4. Sequelize
+5. Firebase

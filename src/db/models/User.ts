@@ -10,8 +10,8 @@ interface UserAttributes {
     username: string,
     password: string,
     email: string,
-    following?: number | 0,
-    followers?: number | 0,
+    following?: number,
+    followers?: number,
     createdAt?: Date | null,
     updatedAt?: Date | null
 }
@@ -52,8 +52,8 @@ class User extends Model<UserAttributes, UserInput> implements UserAttributes {
     public username!: string;
     public password!: string;
     public email!: string;
-    public following?: number | 0;
-    public followers?: number | 0;
+    public following?: number;
+    public followers?: number;
     public createdAt?: Date | null;
     public updatedAt?: Date | null;
 };
