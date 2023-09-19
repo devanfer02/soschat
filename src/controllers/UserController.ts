@@ -42,7 +42,7 @@ export const getUserByUsername = async (req: Request, res: Response): Promise<Re
 
         return createResponse(res, status.Ok, 'successfully fetch user', user);
     } catch (error) {
-        return createResponse(res, status.ServerError, 'internal server error');
+        return createResponseErr(res, status.ServerError, 'internal server error', error as Error);
     }
 };
 
@@ -62,7 +62,7 @@ export const searchUser = async (req: Request, res: Response): Promise<Response>
 
         return createResponse(res, status.Ok, 'successfully fetch user', users);
     } catch (error) {
-        return createResponse(res, status.ServerError, 'internal server error');
+        return createResponseErr(res, status.ServerError, 'internal server error', error as Error);
     }
 } 
 

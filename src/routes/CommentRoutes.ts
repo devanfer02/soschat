@@ -1,6 +1,12 @@
 import express from 'express';
 import { requireUser } from '../middlewares/Auth';
-import { createChainComment, createPostComment, deleteComment, getChainedComments, getPostComments } from '../controllers/CommentController';
+import {
+    createChainComment,
+    createPostComment,
+    deleteComment,
+    getChainedComments,
+    getPostComments 
+} from '../controllers/CommentController';
 import { commentValidator, genericValidator } from '../validators/validator.class';
 import { validatorHandler } from '../validators/validator.handler';
 

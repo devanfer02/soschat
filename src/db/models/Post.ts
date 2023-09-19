@@ -1,6 +1,7 @@
 import { Model, DataTypes, Optional } from 'sequelize'
 import db from '../../config/db'
 import Comment from './Comment';
+import User from './User';
 
 interface PostAttributes {
     id: string,
@@ -18,13 +19,6 @@ export interface PostInput extends Optional<PostAttributes, 'id'> { }
 export interface PostOutput extends Required<PostAttributes> { }
 
 class Post extends Model<PostAttributes, PostInput> implements PostAttributes {
-    static associate() {
-        this.hasMany(Comment, {
-            foreignKey: 'postId',
-            as: 'post_comments',
-            onDelete: 'CASCADE'
-        })
-    }
 
     public id!: string;
     public userId!: string;
@@ -79,7 +73,12 @@ Post.init(
     }
 );
 
-Post.associate();
+
+Post.hasMany(Comment, {
+    foreignKey: 'postId',
+    as: 'post_comments',
+    onDelete: 'CASCADE'
+});
 
 export default Post;
 export { db };

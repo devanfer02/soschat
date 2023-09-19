@@ -11,6 +11,7 @@
 4. Make sure you use git bash already
 5. Make a database called ```soschat``` in MySQL
 6. Configure ```.env``` file
+7. Make a firebase storage and configure the ```.env``` `
 7. Run ```chmod +x cmd/migrate.sh``` in your terminal
 8. Run ```cmd/migrate.sh``` in your terminal to migrate all models 
 9. Make sure you have typescript compiler installed already
@@ -313,29 +314,23 @@ For more details, looks up [models](../src/db/models/) directory
     ```
     {
         "status": 200,
-        "message": "successfully fetch data",
+        "message": "successfully fetch posts",
         "data": [
             {
-                "id": "1b5f6751-eba1-4246-90a5-ba11f695a140",
-                "userId": "7bb0869a-ff6e-4018-b2c0-5661c3d50a26",
-                "title": "aku",
-                "desc": "acaa",
+                "id": "684caaa2-0335-498c-b44c-b1ba090b4818",
+                "userId": "dad05825-85dd-4891-898a-0b3ad018e69f",
+                "title": "keluh kesah oprec asprak",
+                "desc": "knp harus dari ipk, oprecnya males bgt ajg",
                 "image": null,
                 "liked": 0,
-                "comments": 0,
-                "createdAt": "2023-09-13T03:43:26.000Z",
-                "updatedAt": "2023-09-13T03:43:26.000Z"
-            },
-            {
-                "id": "b3a9778d-3cd3-4272-a60b-b5c22c5e95df",
-                "userId": "7bb0869a-ff6e-4018-b2c0-5661c3d50a26",
-                "title": "aku",
-                "desc": "acaa",
-                "image": null,
-                "liked": 0,
-                "comments": 0,
-                "createdAt": "2023-09-13T03:32:04.000Z",
-                "updatedAt": "2023-09-13T03:32:04.000Z"
+                "comments": 1,
+                "createdAt": "2023-09-17T10:25:02.000Z",
+                "updatedAt": "2023-09-19T02:37:51.000Z",
+                "user": {
+                    "id": "dad05825-85dd-4891-898a-0b3ad018e69f",
+                    "fullname": "Rivaldo",
+                    "username": "aldoo123"
+                }
             }
         ]
     }
@@ -351,15 +346,20 @@ For more details, looks up [models](../src/db/models/) directory
         "message": "successfully fetch following's post",
         "data": [
             {
-                "id": "e82bd47f-6c32-4144-92ef-d284ae41a88c",
-                "userId": "d7a133bc-e8d9-4626-a23c-87601f33ca22",
+                "id": "684caaa2-0335-498c-b44c-b1ba090b4818",
+                "userId": "dad05825-85dd-4891-898a-0b3ad018e69f",
                 "title": "keluh kesah oprec asprak",
                 "desc": "knp harus dari ipk, oprecnya males bgt ajg",
                 "image": null,
                 "liked": 0,
-                "comments": 0,
-                "createdAt": "2023-09-16T16:07:53.000Z",
-                "updatedAt": "2023-09-16T16:07:53.000Z"
+                "comments": 1,
+                "createdAt": "2023-09-17T10:25:02.000Z",
+                "updatedAt": "2023-09-19T02:37:51.000Z",
+                "user": {
+                    "id": "dad05825-85dd-4891-898a-0b3ad018e69f",
+                    "fullname": "Rivaldo",
+                    "username": "aldoo123"
+                }
             }
         ]
     }
@@ -526,32 +526,76 @@ For more details, looks up [models](../src/db/models/) directory
         "message": "successfully fetch post comments",
         "data": [
             {
-                "id": "4fe92077-04e9-41e4-b297-dc95de4e29d6",
-                "postId": "c18805c8-4765-47ed-a5ba-fa669829d99b",
-                "userId": "83bd2636-8120-4fc8-9a7e-62c27bfb1211",
-                "commentId": "868a4f31-4b0a-4242-8b7c-756a17405527",
-                "content": "aminnn, ngambil tif aja hihihi",
-                "liked": 0,
-                "totalChained": 0,
-                "createdAt": "2023-09-17T08:07:19.000Z",
-                "updatedAt": "2023-09-17T08:07:19.000Z"
-            },
-            {
-                "id": "868a4f31-4b0a-4242-8b7c-756a17405527",
-                "postId": "c18805c8-4765-47ed-a5ba-fa669829d99b",
-                "userId": "7d6205ec-d520-4cf4-ba08-0d02591aab3a",
+                "id": "a5a1f890-335e-4354-9506-a44ee09e1ad7",
+                "postId": "684caaa2-0335-498c-b44c-b1ba090b4818",
+                "userId": "43afc37c-b9e8-4634-9b02-435fd63d56e8",
                 "commentId": null,
                 "content": "ya sabar bang, next time gas semester 2",
                 "liked": 0,
                 "totalChained": 1,
-                "createdAt": "2023-09-17T08:04:48.000Z",
-                "updatedAt": "2023-09-17T08:07:19.000Z"
+                "createdAt": "2023-09-19T02:37:51.000Z",
+                "updatedAt": "2023-09-19T02:45:48.000Z",
+                "user": {
+                    "id": "43afc37c-b9e8-4634-9b02-435fd63d56e8",
+                    "fullname": "Ananta",
+                    "username": "ininanta10"
+                }
+            },
+            {
+                "id": "c0dfc2e6-ebf4-484c-9ee2-a2fc1c9049d0",
+                "postId": "684caaa2-0335-498c-b44c-b1ba090b4818",
+                "userId": "dad05825-85dd-4891-898a-0b3ad018e69f",
+                "commentId": "a5a1f890-335e-4354-9506-a44ee09e1ad7",
+                "content": "aminnn, ngambil tif aja hihihi",
+                "liked": 0,
+                "totalChained": 0,
+                "createdAt": "2023-09-19T02:45:48.000Z",
+                "updatedAt": "2023-09-19T02:45:48.000Z",
+                "user": {
+                    "id": "dad05825-85dd-4891-898a-0b3ad018e69f",
+                    "fullname": "Rivaldo",
+                    "username": "aldoo123"
+                }
             }
         ]
     }
     ```
 
-4. ##### Delete Comment
+4. ##### Get Chained Comments   
+    endpoint : ```/api/comments/reply/{commentId}```      
+    method : ```GET```       
+    json response :
+    ```
+    {
+        "status": 200,
+        "message": "successfully fetch chained comments",
+        "data": [
+            {
+                "id": "c0dfc2e6-ebf4-484c-9ee2-a2fc1c9049d0",
+                "postId": "684caaa2-0335-498c-b44c-b1ba090b4818",
+                "userId": "dad05825-85dd-4891-898a-0b3ad018e69f",
+                "commentId": "a5a1f890-335e-4354-9506-a44ee09e1ad7",
+                "content": "aminnn, ngambil tif aja hihihi",
+                "liked": 0,
+                "totalChained": 0,
+                "createdAt": "2023-09-19T02:45:48.000Z",
+                "updatedAt": "2023-09-19T02:45:48.000Z",
+                "user": {
+                    "id": "dad05825-85dd-4891-898a-0b3ad018e69f",
+                    "fullname": "Rivaldo",
+                    "username": "aldoo123",
+                    "email": "aldo@gmail.com",
+                    "following": 0,
+                    "followers": 0,
+                    "createdAt": "2023-09-17T10:24:47.000Z",
+                    "updatedAt": "2023-09-17T10:24:47.000Z"
+                }
+            }
+        ]
+    }
+    ```
+
+5. ##### Delete Comment
     endpoint : ```'/api/comments/:id```   
     method : ```DELETE```      
     json response : 

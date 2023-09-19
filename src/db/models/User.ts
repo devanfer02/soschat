@@ -20,32 +20,6 @@ export interface UserInput extends Optional<UserAttributes, 'id'> { }
 export interface UserOutput extends Required<UserAttributes> { }
 
 class User extends Model<UserAttributes, UserInput> implements UserAttributes {
-    static associate() {
-        this.hasMany(Post, {
-            foreignKey: 'userId',
-            as: 'user_posts',
-            onDelete: 'CASCADE'
-        });
-        
-        this.hasMany(Follow, {
-            foreignKey: 'followerId',
-            as: 'user_followers',
-            onDelete: 'CASCADE'
-        });
-
-        this.hasMany(Follow, {
-            foreignKey: 'followingId',
-            as: 'user_following',
-            onDelete: 'CASCADE'
-        });
-
-        this.hasMany(Comment, {
-            foreignKey: 'userId',
-            as: 'user_comments',
-            onDelete: 'CASCADE'
-        });
-
-    }
 
     public id!: string;
     public fullname!: string;
@@ -101,7 +75,39 @@ User.init(
     }
 );
 
-User.associate();
+User.hasMany(Post, {
+    foreignKey: 'userId',
+    as: 'user_posts',
+    onDelete: 'CASCADE'
+});
+
+Post.belongsTo(User, {
+    foreignKey: 'userId',
+    as: 'user'
+});
+
+User.hasMany(Follow, {
+    foreignKey: 'followerId',
+    as: 'user_followers',
+    onDelete: 'CASCADE'
+});
+
+User.hasMany(Follow, {
+    foreignKey: 'followingId',
+    as: 'user_following',
+    onDelete: 'CASCADE'
+});
+
+User.hasMany(Comment, {
+    foreignKey: 'userId',
+    as: 'user_comments',
+    onDelete: 'CASCADE'
+});
+
+Comment.belongsTo(User, {
+    foreignKey: 'userId',
+    as: 'user'
+})
 
 export default User;
 export { db };

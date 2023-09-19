@@ -5,6 +5,7 @@ import Comment from "../db/models/Comment";
 import Post from "../db/models/Post";
 import { createResponse, createResponseErr } from "../helpers/response";
 import status from "../helpers/status";
+import User from "../db/models/User";
 
 export const createPostComment = async (req: Request, res: Response): Promise<Response> => {
     const { postId } = req.params;
@@ -129,6 +130,13 @@ export const getPostComments = async (req: Request, res: Response): Promise<Resp
         const comments = await Comment.findAll({
             where: {
                 postId
+            },
+            include: {
+                model: User,
+                attributes: {
+                    exclude: ['password', 'createdAt', 'updatedAt', 'following', 'followers', 'email']
+                },
+                as: 'user'
             }
         });
 
@@ -145,6 +153,13 @@ export const getChainedComments = async (req: Request, res: Response): Promise<R
         const comments = await Comment.findAll({
             where: {
                 commentId
+            },
+            include: {
+                model: User,
+                attributes: {
+                    exclude: ['password']
+                },
+                as: 'user'
             }
         });
 

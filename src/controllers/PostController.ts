@@ -9,6 +9,7 @@ import status from "../helpers/status";
 import Follow from "../db/models/Follow";
 import { Op } from "sequelize";
 import firebaseConfig from "../config/firebase.config";
+import User from "../db/models/User";
 
 initializeApp(firebaseConfig);
 
@@ -16,7 +17,16 @@ const storage = getStorage();
 
 export const getAllPosts = async (req: Request, res: Response): Promise<Response> => {    
     try {
-        const posts = await Post.findAll();
+        const posts = await Post.findAll({
+            include: {
+                model: User,
+                attributes: {
+                    exclude: ['password', 'createdAt', 'updatedAt', 'following', 'followers', 'email']
+                },
+                as: 'user'
+
+            }
+        });
 
         return createResponse(res, status.Ok, "successfully fetch posts", posts);
     } catch (error) {
@@ -58,6 +68,13 @@ export const getFollowedPost = async (req: Request, res: Response): Promise<Resp
                 userId: {
                     [Op.in]: followingIds
                 }
+            },
+            include: {
+                model: User,
+                attributes: {
+                    exclude: ['password', 'createdAt', 'updatedAt', 'following', 'followers', 'email']
+                },
+                as: 'user'
             },
             order: [
                 ['createdAt', 'DESC']

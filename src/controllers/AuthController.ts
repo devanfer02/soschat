@@ -61,8 +61,8 @@ export const loginUser = async (req: Request, res: Response): Promise<Response> 
             return createResponse(res, status.Unauthorized, 'invalid user or password');
         }
 
-        const accessToken = generateToken({id: user.id, fullname: user.fullname, email: user.email}, '5s', env.jwtToken);
-        const refreshToken = generateToken({id: user.id, fullname: user.fullname, email: user.email, refresh: true}, '2d', env.refreshToken);
+        const accessToken = generateToken({id: user.id, username: user.username, email: user.email}, '5m', env.jwtToken);
+        const refreshToken = generateToken({id: user.id, username: user.username, email: user.email, refresh: true}, '2d', env.refreshToken);
 
         res.cookie("accessToken", accessToken, {
             maxAge: 30000,
