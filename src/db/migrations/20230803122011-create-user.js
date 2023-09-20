@@ -24,6 +24,10 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false
       },
+      photo: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
       following: {
         type: Sequelize.INTEGER,
         defaultValue: 0

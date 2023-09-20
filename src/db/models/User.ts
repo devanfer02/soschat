@@ -10,6 +10,7 @@ interface UserAttributes {
     username: string,
     password: string,
     email: string,
+    photo?: string | null,
     following?: number,
     followers?: number,
     createdAt?: Date | null,
@@ -26,6 +27,7 @@ class User extends Model<UserAttributes, UserInput> implements UserAttributes {
     public username!: string;
     public password!: string;
     public email!: string;
+    public photo?: string;
     public following?: number;
     public followers?: number;
     public createdAt?: Date | null;
@@ -54,6 +56,10 @@ User.init(
         email: {
             type: DataTypes.STRING,
             allowNull: false
+        },
+        photo: {
+            type: DataTypes.STRING,
+            allowNull: true
         },
         following: {
             type: DataTypes.INTEGER,
