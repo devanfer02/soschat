@@ -10,7 +10,7 @@ import Follow from "../db/models/Follow";
 import { Op } from "sequelize";
 import firebaseConfig from "../config/firebase.config";
 import User from "../db/models/User";
-import { uploadToFirebase } from "../helpers/firebase";
+import { deleteFile, uploadToFirebase } from "../helpers/firebase";
 
 initializeApp(firebaseConfig);
 
@@ -135,6 +135,10 @@ export const updatePost = async (req: Request, res: Response): Promise<Response>
             return createResponse(res, status.Created, 'successfully update post');
         }
 
+        if (post.image !== null && post.image !== undefined) {
+            await deleteFile(storage, post.image);
+        }
+
         const downloadUrl = await uploadToFirebase(req, storage, 'posts');
 
         await Post.update({...req.body, image: downloadUrl} , {
@@ -164,6 +168,10 @@ export const deletePost = async (req: Request, res: Response): Promise<Response>
             return createResponseErr(
                 res, status.Forbidden, 'cannot delete post', new Error("forbidden to delete other's user post"
             ));
+        }
+
+        if (post.image !== null && post.image !== undefined) {
+            await deleteFile(storage, post.image);
         }
 
         await Post.destroy({

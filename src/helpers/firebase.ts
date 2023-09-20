@@ -1,5 +1,11 @@
 import { Request } from 'express'
-import {ref, getDownloadURL, uploadBytesResumable, FirebaseStorage } from 'firebase/storage'
+import {
+    ref,
+    getDownloadURL,
+    uploadBytesResumable,
+    FirebaseStorage,
+    deleteObject
+} from 'firebase/storage'
 import { getCurrentDate } from './utils';
 
 export const uploadToFirebase = async (req: Request, storage: FirebaseStorage, dir: string): Promise<string> => {
@@ -16,4 +22,10 @@ export const uploadToFirebase = async (req: Request, storage: FirebaseStorage, d
     const downloadUrl = await getDownloadURL(snapshot.ref);
 
     return downloadUrl;
+}
+
+export const deleteFile = async (storage: FirebaseStorage, url: string) => {
+    const fileRef = ref(storage, url);
+
+    await deleteObject(fileRef);
 }
