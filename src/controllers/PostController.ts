@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { v4 as uuidv4 } from 'uuid';
 import { initializeApp } from 'firebase/app'
-import { getStorage, ref, getDownloadURL, uploadBytesResumable } from 'firebase/storage'
+import { getStorage } from 'firebase/storage'
 
 import Post from "../db/models/Post";
 import { createResponse, createResponseErr } from "../helpers/response"
@@ -10,6 +10,7 @@ import Follow from "../db/models/Follow";
 import { Op } from "sequelize";
 import firebaseConfig from "../config/firebase.config";
 import User from "../db/models/User";
+import { uploadToFirebase } from "../helpers/firebase";
 
 initializeApp(firebaseConfig);
 
@@ -91,7 +92,17 @@ export const createPost = async (req: Request, res: Response): Promise<Response>
     const id = uuidv4();
     const userId = req.session!.user.id
     try {
-        const posts = await Post.create({...req.body, id, userId});
+        if (req.file! === undefined) {
+            const posts = await Post.create({id, userId, ...req.body});
+
+            return createResponse(res, status.Created, "successfully create new post", posts);            
+        }
+
+        const downloadUrl = await uploadToFirebase(req, storage, 'posts');
+
+        const post = {id, userId, ...req.body, image: downloadUrl};
+
+        const posts = await Post.create(post);
 
         return createResponse(res, status.Created, "successfully create new post", posts);
     } catch (error) {
@@ -114,7 +125,19 @@ export const updatePost = async (req: Request, res: Response): Promise<Response>
             return createResponse(res, status.NoContent, 'post not found');
         }
 
-        await Post.update(req.body , {
+        if (req.file! === undefined) {
+            await Post.update(req.body , {
+                where: {
+                    id
+                }
+            });
+    
+            return createResponse(res, status.Created, 'successfully update post');
+        }
+
+        const downloadUrl = await uploadToFirebase(req, storage, 'posts');
+
+        await Post.update({...req.body, image: downloadUrl} , {
             where: {
                 id
             }

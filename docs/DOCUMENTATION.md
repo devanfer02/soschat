@@ -427,6 +427,25 @@ For more details, looks up [models](../src/db/models/) directory
         }
     }
     ```
+    key for image : ```filename```
+    json response if image is present : 
+    ```
+    {
+        "status": 201,
+        "message": "successfully create new post",
+        "data": {
+            "liked": 0,
+            "comments": 0,
+            "title": "ini wallpaper",
+            "desc": "saya wibu, ini wallpaper wibu saya",
+            "image": "https://firebasestorage.googleapis.com/v0/b/soschat-be.appspot.com/o/images%2Fposts%2FIMG_20220404_153715.jpg%20%202023-09-20?alt=media&token=9a420413-8d87-4c6a-aac7-0a2996c3da4c",
+            "id": "dec5d0e8-64ba-4782-b29e-6cf96b09c756",
+            "userId": "43afc37c-b9e8-4634-9b02-435fd63d56e8",
+            "updatedAt": "2023-09-20T15:34:25.830Z",
+            "createdAt": "2023-09-20T15:34:25.830Z"
+        }
+    }
+    ```
 
 4. ##### Update Post
     endpoint : ```/api/posts/{id}```       
