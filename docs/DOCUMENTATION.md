@@ -11,7 +11,7 @@
 4. Make sure you use git bash already
 5. Make a database called ```soschat``` in MySQL
 6. Configure ```.env``` file
-7. Make a firebase storage and configure the ```.env``` `
+7. Make a firebase storage and configure the ```.env```
 7. Run ```chmod +x cmd/migrate.sh``` in your terminal
 8. Run ```cmd/migrate.sh``` in your terminal to migrate all models 
 9. Make sure you have typescript compiler installed already
@@ -427,7 +427,7 @@ For more details, looks up [models](../src/db/models/) directory
         }
     }
     ```
-    key for image : ```filename```
+    key for image : ```filename```       
     json response if image is present : 
     ```
     {

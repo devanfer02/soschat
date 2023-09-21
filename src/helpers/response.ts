@@ -13,7 +13,6 @@ interface ErrResponse {
 }
 
 export const createResponseErr = (res: Response, status: number, message: string, err: Error): Response => {
-    console.log(err);
     const error = err.message
     const errResponse: ErrResponse = {
         status, 

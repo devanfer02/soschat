@@ -17,4 +17,3 @@ export const validatorHandler = (req: Request, res: Response, next: NextFunction
         }
     );
 };
- 
