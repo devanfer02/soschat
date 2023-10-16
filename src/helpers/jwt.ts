@@ -5,17 +5,17 @@ export interface InfoToken {
     expired: boolean
 }
 
-export const generateToken = (data: string | object, expiresIn: string, secret_token: string): string => {
-    const token = jwt.sign(data, secret_token, {
+export const generateToken = (data: string | object, expiresIn: string, secretToken: string): string => {
+    const token = jwt.sign(data, secretToken, {
         expiresIn
     });
 
     return token;
 }
 
-export const verifyToken = (token: string, secret_token: string): InfoToken => {
+export const verifyToken = (token: string, secretToken: string): InfoToken => {
     try {
-        const decoded = jwt.verify(token, secret_token);
+        const decoded = jwt.verify(token, secretToken);
         
         const info: InfoToken = {
             payload: decoded,

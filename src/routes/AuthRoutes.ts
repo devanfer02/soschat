@@ -26,6 +26,6 @@ router.post(
 router.post(
     '/api/auth/logout',
     logoutUser
-)
+);
 
 export default router;

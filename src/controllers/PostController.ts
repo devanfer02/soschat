@@ -102,7 +102,7 @@ export const createPost = async (req: Request, res: Response): Promise<Response>
         if (!fileVerified(req)) {
             return createResponseErr(
                 res, status.BadRequest, "bad file request", new Error("filename ext type should jpg, jpeg or png")
-            )
+            );
         }
 
         const downloadUrl = await uploadToFirebase(req, storage, 'posts');
@@ -145,7 +145,7 @@ export const updatePost = async (req: Request, res: Response): Promise<Response>
         if (!fileVerified(req)) {
             return createResponseErr(
                 res, status.BadRequest, "bad file request", new Error("filename ext type should jpg, jpeg or png")
-            )
+            );
         }
 
         if (post.image !== null && post.image !== undefined) {

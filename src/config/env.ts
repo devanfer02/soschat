@@ -15,6 +15,7 @@ interface Env {
     dbPassword          : string
     dbHost              : string
     dbDialect           : string
+    dbPort              : number
     saltRounds          : number
     sessionKey          : string
     jwtToken            : string
@@ -37,6 +38,7 @@ const env: Env = {
     dbPassword          : process.env.DB_PASSWORD ? process.env.DB_PASSWORD : '',
     dbHost              : process.env.DB_HOST ? process.env.DB_HOST : throwUndefinedEnv('DB_HOST is undefined'),
     dbDialect           : process.env.DB_DIALECT ? process.env.DB_DIALECT : throwUndefinedEnv('DB_DIALECT is undefined'),
+    dbPort              : process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 3306,
     saltRounds          : process.env.SALT_ROUND ? parseInt(process.env.SALT_ROUND!) : throwUndefinedEnv('SALT_ROUND is undefined'),
     sessionKey          : process.env.SESSION_KEY ? process.env.SESSION_KEY : throwUndefinedEnv('SESSION_KEY is undefined'),
     jwtToken            : process.env.JWT_TOKEN ? process.env.JWT_TOKEN : throwUndefinedEnv('JWT_TOKEN is undefined'),
