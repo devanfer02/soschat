@@ -25,8 +25,7 @@ module.exports = {
         allowNull: false
       },
       photo: {
-        type: Sequelize.STRING,
-        allowNull: false
+        type: Sequelize.STRING
       },
       following: {
         type: Sequelize.INTEGER,
