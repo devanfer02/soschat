@@ -12,7 +12,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
         references: {
-            model: 'Posts',
+            model: 'posts',
             key: 'id'
         },
         onDelete: 'CASCADE'
@@ -30,7 +30,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
         references: {
-            model: 'Comments',
+            model: 'comments',
             key: 'id',
         },
         onDelete: 'CASCADE'
@@ -58,6 +58,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Comments');
+    await queryInterface.dropTable('comments');
   }
 };
